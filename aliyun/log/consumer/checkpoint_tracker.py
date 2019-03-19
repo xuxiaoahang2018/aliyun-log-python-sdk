@@ -50,7 +50,8 @@ class ConsumerCheckpointTracker(object):
 
     def flush_check(self):
         current_time = time.time()
-        if current_time > self.last_check_time + self.default_flush_check_point_interval:
+        if current_time > self.last_check_time + self.default_flush_check_point_interval or \
+                self.temp_check_point == self.consumer_group_client.get_end_cursor(self.shard_id):
             try:
                 self.flush_check_point()
             except CheckPointException as e:
